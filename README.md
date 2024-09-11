@@ -198,11 +198,5 @@ Alternately, you can run directly from IDE from ServiceHubApplication.java class
     npm start
 ```
 
-# Contributors
-- [Vraj Shah](https://git.cs.dal.ca/vsshah) (B00979965)
-- [Jems Patel](https://git.cs.dal.ca/jems) (B00984406)
-- [Vedant Patel](https://git.cs.dal.ca/vedant) (B00984592)
-- [Priyanka Ravichandran](https://git.cs.dal.ca/priyankar) (B00962216)
-
 # Test Coverage
 - [IntelliJ Code Coverage Screenshot](/assets/IntellijTestCoverageScreenshot.png)
