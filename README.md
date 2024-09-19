@@ -93,11 +93,7 @@ For build and running the application locally the project requires:
 | web-vitals                          | ^2.1.4      | A library for measuring web vitals                                                                                         |
 
 # Running Application
-## Remotely
-Prerequisite: Connect to dal wifi or use dal vpn. <br>
-**URL**: http://csci5308-vm8.research.cs.dal.ca:3000/
 
-## Locally
 - Clone Repository to your local machine
 ```bash
     git clone https://github.com/Jemspatel007/ServiceHub.git
