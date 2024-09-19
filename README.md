@@ -100,7 +100,7 @@ Prerequisite: Connect to dal wifi or use dal vpn. <br>
 ## Locally
 - Clone Repository to your local machine
 ```bash
-    git clone https://git.cs.dal.ca/courses/2024-summer/csci-5308/group08.git
+    git clone https://github.com/Jemspatel007/ServiceHub.git
 ```
 - Create a Database called “servicehub” using MySQL workbench
 ```sql
