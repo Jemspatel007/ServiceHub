@@ -8,13 +8,13 @@ pipeline {
   }
 
   tools {
-    maven 'maven3'      // Set this name under Global Tools config
-    nodejs 'node16'     // Set this name under Global Tools config
-    jdk 'jdk17'         // Set this name under Global Tools config
+    maven 'maven3'      // Ensure this name exists in Global Tools config
+    nodejs 'node16'     // Ensure this name exists in Global Tools config
+    jdk 'jdk17'         // Ensure this name exists in Global Tools config
   }
 
   stages {
-    stage('Frontend: Install & Test') {
+    stage('Frontend: Install') {
       steps {
         dir('frontend') {
           sh 'npm install'
@@ -31,7 +31,7 @@ pipeline {
               -Dsonar.projectKey=frontend \
               -Dsonar.sources=src \
               -Dsonar.host.url=$SONAR_HOST_URL \
-              -Dsonar.login=$SONARQUBE_TOKEN
+              -Dsonar.token=$SONARQUBE_TOKEN
             """
           }
         }
@@ -54,7 +54,7 @@ pipeline {
               mvn sonar:sonar \
               -Dsonar.projectKey=backend \
               -Dsonar.host.url=$SONAR_HOST_URL \
-              -Dsonar.login=$SONARQUBE_TOKEN
+              -Dsonar.token=$SONARQUBE_TOKEN
             """
           }
         }
@@ -64,8 +64,8 @@ pipeline {
     stage('Docker Build & Push - Frontend') {
       steps {
         script {
-          docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-creds') {
-            def image = docker.build("yourdockerhubusername/servicehub-frontend", "frontend/")
+          docker.withRegistry('https://index.docker.io/v1/', DOCKERHUB_CREDENTIALS) {
+            def image = docker.build("jemspatel007/servicehub-frontend", "frontend/")
             image.push('latest')
           }
         }
@@ -75,8 +75,8 @@ pipeline {
     stage('Docker Build & Push - Backend') {
       steps {
         script {
-          docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-creds') {
-            def image = docker.build("yourdockerhubusername/servicehub-backend", "backend/")
+          docker.withRegistry('https://index.docker.io/v1/', DOCKERHUB_CREDENTIALS) {
+            def image = docker.build("jemspatel007/servicehub-backend", "backend/")
             image.push('latest')
           }
         }
@@ -86,10 +86,10 @@ pipeline {
 
   post {
     always {
-      echo 'Pipeline completed.'
+      echo '✅ Pipeline completed.'
     }
     failure {
-      echo 'Pipeline failed.'
+      echo '❌ Pipeline failed.'
     }
   }
 }
