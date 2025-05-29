@@ -21,9 +21,10 @@ spring:
           starttls:
             enable: true
   datasource:
-    url: jdbc:mysql://db-5308.cs.dal.ca/CSCI5308_8_PRODUCTION?useSSL=false&allowPublicKeyRetrieval=true
-    username: CSCI5308_8_PRODUCTION_USER
-    password: Aneisiru6b
+    # url: jdbc:mysql://localhost:3306/servicehub?useSSL=false&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://mysql:3306/servicehub?useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: Jems@1234
     driver-class-name: com.mysql.cj.jdbc.Driver
   application:
     name: ServiceHub

@@ -1,0 +1,88 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8
+    container_name: servicehub-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: Jems@1234
+      MYSQL_DATABASE: servicehub
+      MYSQL_USER: jems
+      MYSQL_PASSWORD: Jems@1234
+    ports:
+      - "3307:3306"  # Host:Container
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - servicehub-network
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: servicehub-backend
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/servicehub
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=Jems@1234
+      - SPRING_PROFILES_ACTIVE=production
+    networks:
+      - servicehub-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: servicehub-frontend
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    environment:
+      - REACT_APP_BACKEND_URL=http://backend:8080
+    networks:
+      - servicehub-network
+
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: jenkins
+    ports:
+      - "8081:8080"   # Jenkins UI
+      - "50000:50000" # Agent communication
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock  # Docker control
+    user: root  # Ensures Jenkins can access Docker socket
+    restart: unless-stopped
+    networks:
+      - servicehub-network
+  
+  sonarqube:
+    image: sonarqube:latest
+    container_name: sonarqube
+    ports:
+      - "9000:9000"
+    environment:
+      - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_logs:/opt/sonarqube/logs
+    networks:
+      - servicehub-network
+
+volumes:
+  jenkins_home:
+  mysql_data:
+  sonarqube_data:
+  sonarqube_logs:
+
+networks:
+  servicehub-network:
+    driver: bridge
