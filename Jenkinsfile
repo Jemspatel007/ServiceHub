@@ -65,7 +65,7 @@ pipeline {
       steps {
         script {
           docker.withRegistry('https://index.docker.io/v1/', DOCKERHUB_CREDENTIALS) {
-            def image = docker.build("jemspatel007/servicehub-frontend", "frontend/")
+            def image = docker.build("jems007patel/servicehub-frontend", "frontend/")
             image.push('latest')
           }
         }
@@ -76,7 +76,7 @@ pipeline {
       steps {
         script {
           docker.withRegistry('https://index.docker.io/v1/', DOCKERHUB_CREDENTIALS) {
-            def image = docker.build("jemspatel007/servicehub-backend", "backend/")
+            def image = docker.build("jems007patel/servicehub-backend", "backend/")
             image.push('latest')
           }
         }
