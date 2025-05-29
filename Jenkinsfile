@@ -4,16 +4,17 @@ pipeline {
   environment {
     DOCKERHUB_CREDENTIALS = credentials('dockerhub-creds')
     SONARQUBE_TOKEN = credentials('sonarqube-token')
-    SONARQUBE_SERVER = 'SonarQube'  // Must match name in Jenkins → "Configure SonarQube Servers"
+    SONARQUBE_SERVER = 'SonarQube'  // Must match Jenkins → Manage Jenkins → Configure SonarQube servers
   }
 
   tools {
-    maven 'maven3'      // Ensure this name exists in Global Tools config
-    nodejs 'node16'     // Ensure this name exists in Global Tools config
-    jdk 'jdk17'         // Ensure this name exists in Global Tools config
+    maven 'maven3'
+    nodejs 'node16'
+    jdk 'jdk17'
   }
 
   stages {
+
     stage('Frontend: Install') {
       steps {
         dir('frontend') {
@@ -64,7 +65,7 @@ pipeline {
     stage('Docker Build & Push - Frontend') {
       steps {
         script {
-          docker.withRegistry('https://index.docker.io/v1/', DOCKERHUB_CREDENTIALS) {
+          docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-creds') {
             def image = docker.build("jems007patel/servicehub-frontend", "frontend/")
             image.push('latest')
           }
@@ -75,7 +76,7 @@ pipeline {
     stage('Docker Build & Push - Backend') {
       steps {
         script {
-          docker.withRegistry('https://index.docker.io/v1/', DOCKERHUB_CREDENTIALS) {
+          docker.withRegistry('https://index.docker.io/v1/', 'dockerhub-creds') {
             def image = docker.build("jems007patel/servicehub-backend", "backend/")
             image.push('latest')
           }
